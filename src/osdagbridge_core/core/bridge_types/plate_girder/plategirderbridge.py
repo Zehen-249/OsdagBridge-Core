@@ -263,6 +263,7 @@ from osdagbridge_core.core.bridge_components.super_structure.crash_barrier.geome
 )
 from osdagbridge_core.core.bridge_components.super_structure.railing.geometry import (
     railing_load_from_inputs,
+    railing_dead_load_kN_m
 )
 from osdagbridge_core.core.bridge_components.super_structure.shear_studs.geometry import (
     min_stud_head_diameter,
@@ -1417,7 +1418,7 @@ class PlateGirderBridge:
         wc_t_m = float(self.input_dict[KEY_WC_THICKNESS]) / 1000.0
         wc_rho  = float(self.input_dict[KEY_WC_DENSITY])
         barrier_load_kN_m = crash_barrier_load_from_inputs(self.input_dict)
-        railing_load_kN_m = railing_load_from_inputs(self.input_dict)
+        railing_load_kN_m = railing_dead_load_kN_m()
 
         model = self.grillage_model
         model.create_self_weight_load()
@@ -2932,10 +2933,6 @@ class PlateGirderBridge:
         else:
             resolved_median_type = KEY_MEDIAN_TYPE[1]  # safe default: RCC
 
-        print("DEBUG railing raw:", raw_rl_string)
-        print("DEBUG railing resolved:", resolved_railing_value)
-        print("DEBUG girder spacing input m:", self.output_dict[KEY_TS_GIRDER_SPACING])
-        print("DEBUG girder spacing dto mm:", self.output_dict[KEY_TS_GIRDER_SPACING] * 1e3)
 
         # --- Stiffeners: read from flat per-girder keys in output_dict ---
         # Keys are stored as  "<KEY_MP_STIFFENER_xxx>.G{gi}.M1".

@@ -144,5 +144,6 @@ def railing_load_from_inputs(additional_inputs: dict) -> float | None:
     Returns ``None`` when the key is absent, in which case
     ``railing_dead_load_kN_m()`` will apply the IRC 6:2017 Cl.206.5 default.
     """
+    from osdagbridge_core.utils.common import KEY_RL_LOAD_VALUE
     val = additional_inputs.get(KEY_RL_LOAD_VALUE)
     return float(val) if val is not None else None

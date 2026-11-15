@@ -273,11 +273,18 @@ def _update_typical_section_defaults(input_dict: dict) -> None:
     _rl_load      = railing_dead_load_kN_m()   # kN/m — IRC 6:2017 Cl.206.5 (150 kg/m)
     _rl_height_m  = 1100 / 1e3                 # m    — IRC 5:2015 Cl.109.7.2.3 minimum
 
-    _update(KEY_RL_TYPE,       "IRC 5 - RCC Railing")
-    _update(KEY_RL_WIDTH,      DEFAULT_RAILING_WIDTH)        # m
-    _update(KEY_RL_HEIGHT,     _rl_height_m)                 # m
-    _update(KEY_RL_LOAD_MODE,  "As per IRC 6")
-    _update(KEY_RL_LOAD_VALUE, _rl_load)                     # kN/m
+    # Keep values loaded from an .osi file; only seed missing railing inputs.
+    # In particular, the saved IRC 6 load must not be replaced by a geometry-
+    # based RCC barrier load when defaults are expanded.
+    for key, value in (
+        (KEY_RL_TYPE, "IRC 5 - RCC Railing"),
+        (KEY_RL_WIDTH, DEFAULT_RAILING_WIDTH),
+        (KEY_RL_HEIGHT, _rl_height_m),
+        (KEY_RL_LOAD_MODE, "As per IRC 6"),
+        (KEY_RL_LOAD_VALUE, _rl_load),
+    ):
+        if input_dict.get(key) is None:
+            _update(key, value)
 
     # --- Wearing Course sub-tab ---
     # Density and thickness match on_wearing_material_changed() in typical_section_details.py

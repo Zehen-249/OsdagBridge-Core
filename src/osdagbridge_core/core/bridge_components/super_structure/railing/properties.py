@@ -23,6 +23,7 @@ def load_from_area(area_mm2, density):
 
 def rcc_railing_load():
     from .geometry import rigid_barrier_with_railing_area
+    from .geometry import railing_dead_load_kN_m
     geom = rigid_barrier_with_railing_area("rcc")
 
     barrier_load = load_from_area(
@@ -33,13 +34,14 @@ def rcc_railing_load():
     return {
         "type": geom["type"],
         "rcc_barrier_load_kN_per_m": round(barrier_load, 3),
-        "total_load_kN_per_m": round(barrier_load, 3)
+        "total_load_kN_per_m": railing_dead_load_kN_m()
     }
 
 # FIG 1(b) — Rigid Barrier + Steel Railing (with Footpath)
 
 def steel_railing_load():
     from .geometry import rigid_barrier_with_railing_area
+    from .geometry import railing_dead_load_kN_m
     geom = rigid_barrier_with_railing_area("steel")
 
     barrier_load = load_from_area(
@@ -50,5 +52,5 @@ def steel_railing_load():
     return {
         "type": geom["type"],
         "rcc_barrier_load_kN_per_m": round(barrier_load, 3),
-        "total_load_kN_per_m": round(barrier_load, 3)
+        "total_load_kN_per_m": railing_dead_load_kN_m()
     }
